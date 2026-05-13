@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALL IN ONE — Application Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #F0D080;
+            --gold-dim: #8A6B28;
+            --dark: #0A0A0F;
+            --dark2: #10101A;
+            --dark3: #1A1A2E;
+            --white: #F0EEE8;
+            --success: #4CC98E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--dark);
+            color: var(--white);
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 100px; /* Espace pour la barre de navigation */
+        }
+
+        /* Re-utilisation de votre fond Mesh */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,168,76,0.08) 0%, transparent 60%);
+            z-index: -1;
+        }
+
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+        }
+
+        .app-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 24px;
+            letter-spacing: 4px;
+            color: var(--gold);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* --- WIDGET ASSISTANT --- */
+        .ai-widget {
+            background: var(--dark2);
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            color: var(--gold-dim);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        .chat-display {
+            height: 120px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 15px;
+            color: rgba(240,238,232,0.8);
+            border-left: 2px solid var(--gold-dim);
+            padding-left: 15px;
+        }
+
+        .ai-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(201,168,76,0.2);
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Exo 2';
+        }
+
+        .btn-action {
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* --- TRIP CARD --- */
+        .card-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 11px;
+            color: var(--gold-dim);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .trip-card {
+            background: linear-gradient(135deg, var(--dark3), #0d0d1f);
+            border: 1px solid rgba(76,142,201,0.3);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .flight-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .city-code {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .flight-path {
+            flex: 1;
+            height: 1px;
+            background: rgba(201,168,76,0.3);
+            margin: 0 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .flight-path::after {
+            content: '✈';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            color: var(--gold);
+        }
+
+        /* --- NAV BAR --- */
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(16, 16, 26, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover { opacity: 1; color: var(--gold); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="app-title">ALL IN ONE</div>
+</header>
+
+<div class="container">
+    
+    <!-- SECTION ASSISTANT -->
+    <span class="card-label">ASSISTANT PERSONNEL</span>
+    <div class="ai-widget">
+        <div class="ai-status">
+            <div class="status-dot"></div>
+            <span>Assistant "Aura" — À l'écoute</span>
+        </div>
+        <div class="chat-display" id="chat">
+            Bonjour ! Je suis votre assistant ALL IN ONE. Comment puis-je vous aider aujourd'hui ?<br>
+            <i>Ex: "Réserve un vol pour Paris" ou "Crée une image de lion"</i>
+        </div>
+        <div class="ai-input-group">
+            <input type="text" id="userInput" placeholder="Parlez ou écrivez ici...">
+            <button class="btn-action" onclick="handleAction()">ENVOYER</button>
+        </div>
+    </div>
+
+    <!-- SECTION VOYAGE (Visualisation des données organisées) -->
+    <span class="card-label">PROCHAIN VOYAGE ORGANISÉ</span>
+    <div class="trip-card">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--gold-light);">
+            <span>VOL AF892</span>
+            <span>DEMAIN - 10:30</span>
+        </div>
+        <div class="flight-info">
+            <div>
+                <div class="city-code">CDG</div>
+                <div style="font-size: 10px; opacity: 0.6;">PARIS</div>
+            </div>
+            <div class="flight-path"></div>
+            <div style="text-align: right;">
+                <div class="city-code">JFK</div>
+                <div style="font-size: 10px; opacity: 0.6;">NEW YORK</div>
+            </div>
+        </div>
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
+            <div style="font-size: 13px;">Hôtel : <span style="color: var(--gold);">The Ritz-Carlton</span></div>
+            <div style="font-size: 11px; background: rgba(76, 201, 142, 0.1); color: var(--success); padding: 2px 8px; border-radius: 5px;">CONFIRMÉ</div>
+        </div>
+    </div>
+
+    <!-- SECTION POINTS RÉCOMPENSES -->
+    <div style="margin-top: 30px; background: rgba(201,168,76,0.1); border: 1px dashed var(--gold-dim); border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <div style="font-family: 'Rajdhani'; font-size: 14px; color: var(--gold-light);">MES POINTS FIDÉLITÉ</div>
+            <div style="font-size: 18px; font-weight: 700;">1,250 PTS</div>
+        </div>
+        <button style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 5px 12px; border-radius: 5px; font-size: 10px; cursor: pointer;">BOUTIQUE</button>
+    </div>
+
+</div>
+
+<!-- NAVIGATION BAS DE PAGE -->
+<div class="nav-bar">
+    <div class="nav-item">🏠</div>
+    <div class="nav-item">🎙️</div>
+    <div class="nav-item" style="color: var(--gold); opacity: 1;">🛡️</div>
+    <div class="nav-item">🛒</div>
+    <div class="nav-item">⚙️</div>
+</div>
+
+<script>
+    function handleAction() {
+        const input = document.getElementById('userInput');
+        const chat = document.getElementById('chat');
+        const val = input.value.toLowerCase();
+
+        if (val === "") return;
+
+        chat.innerHTML += `<br><span style="color:var(--gold-light)">Vous:</span> ${input.value}`;
+        
+        // Simulation de réponse IA
+        setTimeout(() => {
+            let response = "Je traite votre demande...";
+            if (val.includes("vol") || val.includes("voyage")) {
+                response = "Recherche de vols en cours... J'ai trouvé 3 options pour New York. Voulez-vous que je réserve la plus rapide ?";
+            } else if (val.includes("image")) {
+                response = "Génération de l'image en cours via l'IA intégrée... Prêt dans 5 secondes.";
+            } else {
+                response = "Commande reçue. Je m'en occupe immédiatement.";
+            }
+            chat.innerHTML += `<br><span style="color:var(--gold)">Aura:</span> ${response}`;
+            chat.scrollTop = chat.scrollHeight;
+        }, 800);
+
+        input.value = "";
+    }
+</script>
+
+</body>
+</html>
